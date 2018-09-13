@@ -50,7 +50,6 @@ void addSummaryStats(ofstream& outFile, const stats& s) {
   outFile << "Mean:     " << s.mean << endl;
   outFile << "Variance: " << s.variance << endl;
   outFile << "StDev:    " << s.stdev << endl << endl;
-  outFile << "SeqCount: " << s.seqCount << endl << endl;
 }
 
 void addProbabilities(ofstream& outFile, const stats& s) {
@@ -98,7 +97,7 @@ void addRandomSequences(ofstream& outFile, const stats& s, int numSequences) {
   writeRandomHead(outFile);
   for (int i=0; i < numSequences; ++i) {
     int length = positiveRandomNormal(s.mean, s.stdev);
-    writeRandomSequence(outFile, length);
+    writeRandomSequence(outFile, s, length);
   }
   outFile << endl;
 }
@@ -109,11 +108,17 @@ void writeRandomHead(ofstream& outFile) {
   outFile << "================================" << endl << endl;
 }
 
-void writeRandomSequence(ofstream& outFile, int length) {
+void writeRandomSequence(ofstream& outFile, const stats& s, int length) {
   // Write a sequence of randomly generated grams of specified length, followed
   // by a line break.
+
+  int numA = getGramCount(s.file, 'A');
+  int numC = getGramCount(s.file, 'C');
+  int numG = getGramCount(s.file, 'G');
+  int numT = getGramCount(s.file, 'T');
+
   for (int i = 0; i < length; ++i) {
-    outFile << randomGram();
+    outFile << randomGram(numA, numC, numG, numT);
   }
   outFile << endl;
 }

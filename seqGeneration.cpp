@@ -21,6 +21,30 @@ float randomUniform() {
   return (float)rand()/RAND_MAX;
 }
 
-char randomGram() {
+char randomGram(int numA, int numC, int numG, int numT) {
+  // Generates a random gram based on the relative occurrences of the grams
+  // provided.
+  
+  int tot = numA + numC + numG + numT;
+
+  // Make sure the total isn't somehow exceeding the maximum limits of rand()
+  while (tot > RAND_MAX) {
+    numA /= 2;
+    numC /= 2;
+    numG /= 2;
+    numT /= 2;
+    tot = numA + numC + numG + numT;
+  }
+
+  int roll = rand() % tot;
+  if (roll < numA) {
+    return 'A';
+  } else if (roll < numA + numC) {
+    return 'C';
+  } else if (roll < numA + numC + numG) {
+    return 'G';
+  } else {
+    return 'T';
+  }
   return GRAMS[rand() % 4];
 }

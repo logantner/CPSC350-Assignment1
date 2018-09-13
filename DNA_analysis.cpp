@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
     if (seqFileExists(seqFileName)) {
       stats seqStats = collectStats(seqFileName);
       writeStatsToFile(outFile, seqStats);
-      addRandomSequences(outFile, seqStats, 10);
+      addRandomSequences(outFile, seqStats, 1000);
       cout << ">> Statistics and sequences have been recorded." << endl;
     } else {
       cout << ">> The file '" << seqFileName << "' does not exist." << endl;

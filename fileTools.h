@@ -16,6 +16,6 @@ void addBigramProbabilities(std::ofstream&, const stats&);
 
 void addRandomSequences(std::ofstream&, const stats&, int);
 void writeRandomHead(std::ofstream&);
-void writeRandomSequence(std::ofstream&, int);
+void writeRandomSequence(std::ofstream&, const stats&, int);
 
 #endif

@@ -3,6 +3,6 @@
 
 int positiveRandomNormal(int, float);
 float randomUniform();
-char randomGram();
+char randomGram(int, int, int, int);
 
 #endif
