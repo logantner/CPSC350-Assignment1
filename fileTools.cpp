@@ -35,7 +35,6 @@ void writeStatsToFile(ofstream& outFile, const stats& s) {
 }
 
 void addSummaryStats(ofstream& outFile, const stats& s) {
-
   // Line break for visibility
   for (int i = 0; i < 80; ++i) {
     outFile << "/";
@@ -117,6 +116,7 @@ void writeRandomSequence(ofstream& outFile, const stats& s, int length) {
   int numG = getGramCount(s.file, 'G');
   int numT = getGramCount(s.file, 'T');
 
+  // Write the sequence, one (weighted) random char at a time
   for (int i = 0; i < length; ++i) {
     outFile << randomGram(numA, numC, numG, numT);
   }
