@@ -9,7 +9,7 @@ using std::endl;
 int main(int argc, char** argv) {
   // Check for the correct number of command arguments
   if (argc <= 1) {
-    cout << "> User must enter the name of a text file" << endl;
+    cout << ">> User must enter the name of a text file" << endl;
     return 1;
   }
 
@@ -22,15 +22,15 @@ int main(int argc, char** argv) {
       stats seqStats = collectStats(seqFileName);
       writeStatsToFile(outFile, seqStats);
       addRandomSequences(outFile, seqStats, 10);
-      cout << "> Statistics and sequences have been recorded." << endl;
+      cout << ">> Statistics and sequences have been recorded." << endl;
     } else {
-      cout << "> The file '" << seqFileName << "' does not exist." << endl;
+      cout << ">> The file '" << seqFileName << "' does not exist." << endl;
     }
 
-    cout << "> Would you like to process another list? ('y' to continue): ";
+    cout << ">> Would you like to process another list? ('y' to continue): ";
     std::cin >> response;
     if (response == 'y') {
-      cout << "> Please enter the name of a new file: ";
+      cout << ">> Please enter the name of a new file: ";
       std::cin >> seqFileName;
     }
   }

@@ -5,6 +5,8 @@
 using std::ifstream;
 
 stats collectStats(char* fileName) {
+  // Calculate various basic statistics from the specified file, stored into
+  // a newly created stats struct
   stats s;
   s.file = fileName;
 
@@ -20,53 +22,70 @@ stats collectStats(char* fileName) {
 }
 
 int getLineCount(char* fileName) {
+  // Determines the total number of lines (sequences) in the file. Empty
+  // intermediate lines are included in the total
   ifstream seqFile (fileName);
-
   char c;
   int lineTot = 0;
+
   while (seqFile.get(c)) {
     if (c == '\n') {
       lineTot++;
     }
   }
+
   seqFile.close();
   return lineTot;
 }
 
 int getSum(char* fileName) {
+  // Counts the total number of valid grams within the entire file (both lower
+  // and uppercase a, c, g, and t)
   ifstream seqFile (fileName);
-
   char c;
   int tot = 0;
+
   while (seqFile.get(c)) {
-    if (c != '\n') {
+    if (isGram(c)) {
       tot++;
     }
   }
+
   seqFile.close();
   return tot;
 }
 
 float getVariance(char* fileName, float mean, int lineCount) {
+  // Calculates the sample variance by summing the squared difference between
+  // sequence lengths and the sample mean
   ifstream seqFile (fileName);
   char c;
-  int seqCount;
   float numerator = 0.0;
 
   while (seqFile.get(c)) {
-    seqCount = 0;
-    while (c != '\n') {
-      seqCount++;
-      seqFile.get(c);
-    }
-    numerator += (seqCount - mean)*(seqCount - mean);
+    int seqLength = getSeqLength(seqFile, c);
+    numerator += (seqLength - mean) * (seqLength - mean);
   }
 
   seqFile.close();
-  return numerator/lineCount;
+  return numerator / lineCount;
+}
+
+int getSeqLength(std::ifstream& seqFile, char c) {
+  // Determines the length of the sequence at the present location of the
+  // provided file. Iterates the file forward to the end of the current line.
+  int count = 0;
+  while (c != '\n') {
+    if (isGram(c)) {
+      count++;
+    }
+    seqFile.get(c);
+  }
+  return count;
 }
 
 int getGramCount(char* fileName, char gram) {
+  // Counts the number of occurences of the specified gram within the file
   ifstream seqFile (fileName);
   char c;
   int count = 0;
@@ -82,19 +101,17 @@ int getGramCount(char* fileName, char gram) {
 }
 
 int getBigramCount(char* fileName, char gram1, char gram2) {
+  // Counts the number of occurrences of a specified bigram within the file
   ifstream seqFile (fileName);
-  char cur;
-  char prev;
+  char cur, prev = '\n'; // initialized to a nonsense character
   int count = 0;
 
   while (seqFile.get(cur)) {
-    while (cur != '\n') {
-      prev = cur;
-      seqFile.get(cur);
-      if (bigramMatch(gram1, gram2, prev, cur)) {
-        count++;
-      }
+    if (bigramMatch(gram1, gram2, prev, cur)) {
+      count++;
     }
+    // Incremenet prev forward one character
+    prev = cur;
   }
 
   seqFile.close();
@@ -102,10 +119,19 @@ int getBigramCount(char* fileName, char gram1, char gram2) {
 }
 
 bool bigramMatch(char gram1, char gram2, char test1, char test2) {
+  // Returns true if the test bigram formed by {test1, test2} is a valid version
+  // of the bigram specified by {gram1, gram2}
   return ( gramMatch(gram1, test1) and gramMatch(gram2, test2) );
 }
 
-bool gramMatch(char upperGram, char test) {
-  char lowerGram = (char)tolower(upperGram);
-  return (upperGram == test or lowerGram == test);
+bool gramMatch(char gram, char test) {
+  // Returns true if the test character is a valid version of the specified gram
+  test = toupper(test);
+  return (gram == test);
+}
+
+bool isGram(char c) {
+  // Returns true if the character is any viable gram
+  c = toupper(c);
+  return (c == 'A' or c == 'C' or c == 'G' or c == 'T');
 }

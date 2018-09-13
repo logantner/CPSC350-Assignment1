@@ -1,6 +1,8 @@
 #ifndef _SEQSTATS_H_
 #define _SEQSTATS_H_
 
+#include <fstream>
+
 const int NUM_GRAMS = 4;
 const char GRAMS[NUM_GRAMS] = {'A', 'C', 'G', 'T'};
 
@@ -18,9 +20,11 @@ stats collectStats(char*);
 int getLineCount(char*);
 int getSum(char*);
 float getVariance(char*, float, int);
+int getSeqLength(std::ifstream&, char);
 int getGramCount(char*, char);
 int getBigramCount(char*, char, char);
 bool bigramMatch(char, char, char, char);
 bool gramMatch(char, char);
+bool isGram(char);
 
 #endif
